@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public abstract class Tools {
 
@@ -100,7 +101,7 @@ public abstract class Tools {
 	 * @param byPassDelimiter : the string that we wanna add to the domainName
 	 * @return The domainName with -bypass in it
 	 */
-	public static String addByPassStringToDomainName(String domainName, String byPassDelimiter) {
+	public static String addByPassDelimiterStringToDomainName(String domainName, String byPassDelimiter) {
 		int n = domainName.length();
 		String newDomainName = "";
 		int i = domainName.length()-1;
@@ -122,7 +123,12 @@ public abstract class Tools {
 	}
 	
 	
-	public static boolean containsByPass(String domainName, String byPassDelimiter) {
+	/**
+	 * @param domainName
+	 * @param byPassDelimiter
+	 * @return true if the domain name contains the bypassDelimiter, false else
+	 */
+	public static boolean containsByPassDelimiter(String domainName, String byPassDelimiter) {
 		int m = byPassDelimiter.length();
 		int i = domainName.length()-1;
 		while (domainName.charAt(i) != '-' && i>0) {
@@ -141,5 +147,50 @@ public abstract class Tools {
 		else return false;
 	}
 	
+	
+	/**
+	 * @param domainName
+	 * @param byPassDelimiter
+	 * @return String of the domainName without the bypassDelimiter
+	 */
+	public static String removeByPassDelimiter(String domainName, String byPassDelimiter) {
+		String newdomainName ="";
+		int n = domainName.length();
+		int m = byPassDelimiter.length();
+		int i = n-1;
+		while (domainName.charAt(i) != '-' && i>0) {
+			i-=1;
+		}
+		i-=1;
+		for (int j = 0; j<=i; j++) {
+			newdomainName += domainName.charAt(j);
+		}
+		i += m;
+		for (int j = i+1; j<n; j++) {
+			newdomainName += domainName.charAt(j);
+		}
+		return newdomainName;
+	}
+	
+	
+	/**
+	 * @param msIsdn
+	 * @param domainName
+	 * @return the destination IP Address from the data base by msIsdn
+	 */
+	public static String FinalIpAddrOfTheDomainName(MsIsdn msIsdn, String domainName) {
+		String ipAddr = "";
+		for(Map.Entry<MsIsdn, ArrayList<ArrayList<String>>> mapentry : DataBase.getdBbyMsIsdn().entrySet()) {
+        	if(mapentry.getKey().equals(msIsdn)) {
+        		int m = mapentry.getValue().size();
+        		for (int i =0; i<m; i++) {
+        			if(mapentry.getValue().get(i).get(1).equals(domainName)) {
+        				ipAddr += mapentry.getValue().get(i).get(3);
+        			}
+        		}
+        	}
+        }
+		return ipAddr;
+	}
 
 }
