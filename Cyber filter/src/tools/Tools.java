@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Map;
+
+import tests.IpFromUrl;
 
 public abstract class Tools {
 
@@ -27,7 +30,7 @@ public abstract class Tools {
 		ArrayList<String> preAndSuffixUrl = new ArrayList<String>();
 		String domainName = url.toString();
 		String prefix = "";
-		String suffix = "";
+		String suffix = "/";
 		int i = 0;
 //		if(domainName.charAt(0) == 'h'){}  toutes les url commencent par http:..			
 		while(domainName.charAt(i) != '/') {
@@ -39,14 +42,21 @@ public abstract class Tools {
 		preAndSuffixUrl.add(prefix);
 		
 		preAndSuffixUrl.add(domainNameOfUrl(url));
-			
-		while(domainName.charAt(i) != '/') {
+		
+//		System.out.println(domainName.length());
+		while((domainName.charAt(i-1) != '/') && (i<domainName.length()) ) {
 			i+=1;
+//			System.out.println(i);
 		}
-		for(int j = i; j < domainName.length(); j++) {
-			suffix += domainName.charAt(j);
+//		System.out.println("yes");
+		if(i<domainName.length()) {
+//			System.out.println("yes");
+			for(int j = i; j < domainName.length(); j++) {
+				suffix += domainName.charAt(j);
+			}
+			preAndSuffixUrl.add(suffix);
 		}
-		preAndSuffixUrl.add(suffix);
+		else preAndSuffixUrl.add("");
 		
 		preAndSuffixUrl.add(urlToIpAddr(url));
 		return preAndSuffixUrl;
@@ -60,6 +70,7 @@ public abstract class Tools {
 	 */
 	public static String urlToIpAddr(URL url) throws UnknownHostException {
 		InetAddress address = InetAddress.getByName(url.getHost());
+//		System.out.println(address);
 	    String ip = address.getHostAddress();
 	    return ip;
 	}
@@ -78,22 +89,22 @@ public abstract class Tools {
 	
 //#################################### FUNCTIONS LINKED TO THE BYPASS : ###########################################################""""
 	
-	/**
-	 * @return true if hhe user wants to bypass, false else
-	 * @throws IOException
-	 */
-	public static boolean byPass() throws IOException {
-		System.out.println("This is a dangerous link, tape: yes, if you still want to open it.");
-		 // Enter data using BufferReader
-        BufferedReader reader = new BufferedReader(
-            new InputStreamReader(System.in));
-         // Reading data using readLine
-        String input = reader.readLine();
-        if(input.equals("yes")) {
-        	return true;
-        }
-        else return false;
-	}
+//	/**
+//	 * @return true if hhe user wants to bypass, false else
+//	 * @throws IOException
+//	 */
+//	public static boolean byPass() throws IOException {
+//		System.out.println("This is a dangerous link, tape: yes, if you still want to open it.");
+//		 // Enter data using BufferReader
+//        BufferedReader reader = new BufferedReader(
+//            new InputStreamReader(System.in));
+//         // Reading data using readLine
+//        String input = reader.readLine();
+//        if(input.equals("yes")) {
+//        	return true;
+//        }
+//        else return false;
+//	}
 	
 	
 	/**
@@ -123,29 +134,29 @@ public abstract class Tools {
 	}
 	
 	
-	/**
-	 * @param domainName
-	 * @param byPassDelimiter
-	 * @return true if the domain name contains the bypassDelimiter, false else
-	 */
-	public static boolean containsByPassDelimiter(String domainName, String byPassDelimiter) {
-		int m = byPassDelimiter.length();
-		int i = domainName.length()-1;
-		while (domainName.charAt(i) != '-' && i>0) {
-			i-=1;
-		}
-		i-=1;
-		String testByPassDelimiter = "";
-		for (int j = 0; j<m; j++) {
-			testByPassDelimiter += domainName.charAt(i+1);
-			i+=1;
-		}
-		System.out.println(testByPassDelimiter);
-		if (testByPassDelimiter.equals(byPassDelimiter)) {
-			return true;
-		}
-		else return false;
-	}
+//	/**
+//	 * @param domainName
+//	 * @param byPassDelimiter
+//	 * @return true if the domain name contains the bypassDelimiter, false else
+//	 */
+//	public static boolean containsByPassDelimiter(String domainName, String byPassDelimiter) {
+//		int m = byPassDelimiter.length();
+//		int i = domainName.length()-1;
+//		while (domainName.charAt(i) != '-' && i>0) {
+//			i-=1;
+//		}
+//		i-=1;
+//		String testByPassDelimiter = "";
+//		for (int j = 0; j<m; j++) {
+//			testByPassDelimiter += domainName.charAt(i+1);
+//			i+=1;
+//		}
+//		System.out.println(testByPassDelimiter);
+//		if (testByPassDelimiter.equals(byPassDelimiter)) {
+//			return true;
+//		}
+//		else return false;
+//	}
 	
 	
 	/**
@@ -191,6 +202,13 @@ public abstract class Tools {
         	}
         }
 		return ipAddr;
+	}
+	
+	
+	public static void main(String[] args) throws MalformedURLException, IOException {
+		URL url = new URL("http://testing1.badinternetdomain.com");
+//		System.out.println(urlToIpAddr(url));
+//		System.out.println(IpFromUrl.getIp("phishing.badinternetdomain.com"));
 	}
 
 }

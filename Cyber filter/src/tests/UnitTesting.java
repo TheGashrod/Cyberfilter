@@ -2,14 +2,14 @@
  * https://github.com/dnsjava/dnsjava  (for dns part)
  * https://www.pandasecurity.com/fr/mediacenter/technologie/proxy-et-comment-utiliser/   (how to use a proxy)
  */
-package application;
+package tests;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import application.SICAP;
+import application.User;
 import tools.DataBase;
 import tools.MsIsdn;
 import tools.Tools;
@@ -23,7 +23,7 @@ public class UnitTesting {
 
 	public static void main(String[] args) throws IOException	{
 		URL url1 = new URL("http://www.Orange.com/test/stage/orange");
-		URL url2 = new URL("http://www.badInternetconnection.com/test/Internship");
+		URL url2 = new URL("http://phishing.badinternetdomain.com");
 		
 //		Test de la décomposition d'une url                                 ---> V
 		ArrayList<String> decomposedUrl1 = new ArrayList<String>();
@@ -46,7 +46,7 @@ public class UnitTesting {
 		System.out.println(DataBase.getdBbyMsIsdn());
 		
 //		Test de la fonction byPass                                         ---> V
-		System.out.println(Tools.byPass());
+		System.out.println(User.byPass());
 		
 //		Test de l'ajout de -bypass au nom de domaine                       ---> V
 		String byPassDelimiter = "-j_sq@@@//dsLFKSGJ"; 
@@ -57,7 +57,7 @@ public class UnitTesting {
 		
 //      Test le fait de reperer -bypassDelimiter dans un nom de domain     ---> V
 		String newDomainName = Tools.addByPassDelimiterStringToDomainName(decomposedUrl2.get(1), byPassDelimiter);
-		System.out.println(Tools.containsByPassDelimiter(newDomainName, byPassDelimiter));
+		System.out.println(SICAP.containsByPassDelimiter(newDomainName, byPassDelimiter));
 		
 //      Test retirer -bypassDelimiter du nom de domaine 					---> V
 		System.out.println(Tools.removeByPassDelimiter(newDomainName, byPassDelimiter));
