@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import tools.DataBase;
 import tools.MsIsdn;
@@ -26,9 +27,18 @@ public abstract class User {
 	}
 	
 	public static void dnsResolutionForUrl(URL url) throws UnknownHostException {
-		ArrayList<String> decomposedUrl = new ArrayList<String>();
-		decomposedUrl = Tools.urlDecomposition(url);
-		DataBase.addDataForMsIsdn(msIsdn, decomposedUrl);
+		boolean flag = false;
+		for(Map.Entry<MsIsdn, ArrayList<ArrayList<String>>> mapentry : DataBase.getdBbyMsIsdn().entrySet()) {
+        	if(mapentry.getKey().equals(msIsdn)) {
+        		flag = true;
+        	}
+        	
+        }
+		if (flag == false) {
+			ArrayList<String> decomposedUrl = new ArrayList<String>();
+			decomposedUrl = Tools.urlDecomposition(url);	
+			DataBase.addDataForMsIsdn(msIsdn, decomposedUrl);
+		}
 	}
 	
 	

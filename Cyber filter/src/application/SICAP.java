@@ -25,8 +25,10 @@ public abstract class SICAP {
 			testByPassDelimiter += domainName.charAt(i+1);
 			i+=1;
 		}
-		System.out.println(testByPassDelimiter);
+//		System.out.println(testByPassDelimiter);
 		if (testByPassDelimiter.equals(byPassDelimiter)) {
+			System.out.println("[SICAP] : a -byPassDelimiter has been detected");
+			System.out.println("########");
 			return true;
 		}
 		else return false;
